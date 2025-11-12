@@ -1,7 +1,8 @@
 import { Container, Grid, Typography, Box, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useEffect, useState } from "react";
+import { useEffect, useCallback useState } from "react";
 import { forecastData, scheduleData } from "./dummydata/DummyData";
+import getWeatherData from './dummydata/api.jsx'
 
 // Create a theme instance.
 const theme = createTheme({
@@ -20,9 +21,10 @@ const theme = createTheme({
 
 // --- Main Weather Dashboard Component ---
 export default function WeatherDashboard() {
+  
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-
+  
   useEffect(() => {
     const timerId = setInterval(() => {
       setCurrentTime(new Date());

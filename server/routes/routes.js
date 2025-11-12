@@ -1,4 +1,3 @@
-//Defines all routes
 import express from "express"
 import axios from "axios";
 import "dotenv/config";
@@ -6,7 +5,9 @@ import "dotenv/config";
 const router = express.Router()
 
 let open_weather_api_key = process.env.OPEN_WEATHER_API;
-//Get city weather
+
+//Define API routes here
+//Get present day weather data
 router.get("/weather", async (req, res) => {
   const { city } = req.query;
 
@@ -19,7 +20,11 @@ router.get("/weather", async (req, res) => {
   try {
     const response = await axios.get(apiUrl);
     const weatherData = response.data;
-    res.json(weatherData); //All weather data
+    const weatherResponse = {
+			"weather":weatherData.weather,
+			"main":weatherData.main
+		}
+    res.json(weatherResponse) //All weather data
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Could not find complete request" });
