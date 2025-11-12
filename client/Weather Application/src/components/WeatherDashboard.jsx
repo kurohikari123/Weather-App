@@ -24,7 +24,9 @@ export default function WeatherDashboard() {
   
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-  
+  const [error,setError] = useState(null)
+  const [isLoading,setLoading]  = useState(false)
+
   useEffect(() => {
     const timerId = setInterval(() => {
       setCurrentTime(new Date());
@@ -33,6 +35,20 @@ export default function WeatherDashboard() {
     return () => clearInterval(timerId);
   }, []);
 
+  //Remember the function use callback hook
+  const fetchWeather = useCallback(async (lat,lon)=>{
+    if(!lat || !lon) return
+    try{
+      const response = getWeatherData(lat,lon)
+    }
+    catch(error){
+      setError(error)
+      console.log(error)
+    }
+    finally{
+      setLoading(false)
+    }
+  },[])
   // --- Time and Date Formatting ---
   // This function formats the time and ensures it includes AM/PM
   const formatTime = (date) => {

@@ -8,9 +8,9 @@ const apiClient = axios.create({
 	}
 })
 
-const getWeatherCity = (city) =>{
+const getWeatherCity = (lat,lon) =>{
 	return apiClient.get('/api/weather',{
-		params:{city}
+		params:{lat,lon}
 	})
 }
 
