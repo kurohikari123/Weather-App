@@ -1,6 +1,6 @@
 import { Container, Grid, Typography, Box, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useEffect, useCallback useState } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { forecastData, scheduleData } from "./dummydata/DummyData";
 import getWeatherData from './dummydata/api.jsx'
 
@@ -24,8 +24,11 @@ export default function WeatherDashboard() {
   
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-  const [error,setError] = useState(null)
+  const [error,setError] = useState('')
   const [isLoading,setLoading]  = useState(false)
+  const [presentWeather,setpresentWeather] = useState({})
+  // Here, we split the string "10:30 PM" into ["10:30", "PM"]
+  const [time, period] = formatTime(currentTime).split(" ");
 
   useEffect(() => {
     const timerId = setInterval(() => {
@@ -39,7 +42,9 @@ export default function WeatherDashboard() {
   const fetchWeather = useCallback(async (lat,lon)=>{
     if(!lat || !lon) return
     try{
+     //Catch the response here 
       const response = getWeatherData(lat,lon)
+      setpresentWeather(response)
     }
     catch(error){
       setError(error)
@@ -49,6 +54,22 @@ export default function WeatherDashboard() {
       setLoading(false)
     }
   },[])
+
+  useEffect(()=>{
+    //Use Geolocation API
+    if("geolocation" in navigator){
+        navigator.location.getCurrentPosition(
+          (position)=>{
+              const {latitude,longitude} = position.coords
+              fetchWeather(latitude,longitude)
+        },
+        (error)=>{
+            console.log(error.message)
+            setError('Location not found!')
+          }
+      )
+    }
+  },[fetchWeather])
   // --- Time and Date Formatting ---
   // This function formats the time and ensures it includes AM/PM
   const formatTime = (date) => {
@@ -69,9 +90,7 @@ export default function WeatherDashboard() {
     });
   };
 
-  // Here, we split the string "10:30 PM" into ["10:30", "PM"]
-  const [time, period] = formatTime(currentTime).split(" ");
-
+  
   const handleForecastClick = (index) => {
     setSelectedDayIndex(index);
     // In a real app, you would also trigger a data fetch or update the main display here

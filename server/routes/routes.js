@@ -1,33 +1,41 @@
+//Defines all routes
+import axios from 'axios'
 import express from "express"
-import axios from "axios";
-import "dotenv/config";
+import 'dotenv/config'
 
 const router = express.Router()
 
-let open_weather_api_key = process.env.OPEN_WEATHER_API;
 
-//Define API routes here
-//Get present day weather data
-router.get("/weather", async (req, res) => {
-  const { lat,lon } = req.query;
+router.get('/weather', async (req, res) => {
+  const { lat, lon } = req.query;
 
   if (!lat || !lon) {
-    res.status(400).json({ error: "City not found!" });
+    return res.status(400).json({ error: 'Latitude and longitude are required' });
   }
 
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${open_weather_api_key}&units=metric`
+  const apiKey = process.env.OPEN_WEATHER_API;
+  // Note the different API endpoint structure: uses lat and lon
+  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
   try {
     const response = await axios.get(apiUrl);
     const weatherData = response.data;
-    const weatherResponse = {
-			"weather":weatherData.weather,
-			"main":weatherData.main
-		}
-    res.json(weatherResponse) //All weather data
+
+    const simplifiedData = {
+      city: weatherData.name,
+      temperature: weatherData.main.temp,
+      condition: weatherData.weather[0].main,
+      description: weatherData.weather[0].description,
+      icon: weatherData.weather[0].icon,
+    };
+
+    res.json(simplifiedData);
+
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Could not find complete request" });
+    console.error('Error fetching weather data by coords:', error.response?.data?.message || error.message);
+    res.status(error.response?.status || 500).json({ 
+      error: 'Could not fetch weather data for the provided coordinates.' 
+    });
   }
 });
 
