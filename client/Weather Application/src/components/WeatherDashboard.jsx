@@ -1,6 +1,6 @@
-import { Container, Grid, Typography, Box, Paper } from "@mui/material";
+import { FormControl,InputLabel,Select,MenuItem, Container, Grid, Typography, Box, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useEffect, useCallback, useState } from "react";
+import { useEffect,useState } from "react";
 import { forecastData, scheduleData } from "./dummydata/DummyData";
 import getWeatherData from './dummydata/api.jsx'
 
@@ -28,6 +28,17 @@ export default function WeatherDashboard() {
   const [isLoading,setLoading]  = useState(false)
   const [presentWeather,setpresentWeather] = useState({})
   // Here, we split the string "10:30 PM" into ["10:30", "PM"]
+  //
+  const formatTime = (date) => {
+    // We get a string like "10:30 PM"
+    return date.toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
+
+
   const [time, period] = formatTime(currentTime).split(" ");
 
   useEffect(() => {
@@ -38,48 +49,9 @@ export default function WeatherDashboard() {
     return () => clearInterval(timerId);
   }, []);
 
-  //Remember the function use callback hook
-  const fetchWeather = useCallback(async (lat,lon)=>{
-    if(!lat || !lon) return
-    try{
-     //Catch the response here 
-      const response = getWeatherData(lat,lon)
-      setpresentWeather(response)
-    }
-    catch(error){
-      setError(error)
-      console.log(error)
-    }
-    finally{
-      setLoading(false)
-    }
-  },[])
-
-  useEffect(()=>{
-    //Use Geolocation API
-    if("geolocation" in navigator){
-        navigator.location.getCurrentPosition(
-          (position)=>{
-              const {latitude,longitude} = position.coords
-              fetchWeather(latitude,longitude)
-        },
-        (error)=>{
-            console.log(error.message)
-            setError('Location not found!')
-          }
-      )
-    }
-  },[fetchWeather])
-  // --- Time and Date Formatting ---
+    // --- Time and Date Formatting ---
   // This function formats the time and ensures it includes AM/PM
-  const formatTime = (date) => {
-    // We get a string like "10:30 PM"
-    return date.toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
+
 
   const formatDate = (date) => {
     return date.toLocaleDateString([], {
@@ -206,6 +178,20 @@ export default function WeatherDashboard() {
               <Typography variant="h1" sx={{ ml: 4 }}>
                 {displayTemp}°
               </Typography>
+              {/*Insert a dropdown here to select location since geolocation API does not work*/}
+<FormControl fullWidth>
+  <InputLabel id="demo-simple-select-label">Age</InputLabel>
+  <Select
+    labelId="demo-simple-select-label"
+    id="demo-simple-select"
+    value={''}
+    label="Location"
+  >
+    <MenuItem value={10}>Ten</MenuItem>
+    <MenuItem value={20}>Twenty</MenuItem>
+    <MenuItem value={30}>Thirty</MenuItem>
+  </Select>
+</FormControl>
             </Grid>
           </Grid>
 
