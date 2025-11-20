@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
-import testRoute from "./routes/routes.js"
+import weatherRoutes from "./routes/routes.js"
+import 'dotenv/config'
 
 const app = express();
 const route = express.Router();
@@ -15,8 +16,9 @@ app.get('/',(req,res)=>{
 	res.send("Weather server is running...")
 })
 
-//Specify the API calls here
-app.use('/api',testRoute)
+//Specify the API calls and routes here
+app.use('/api',weatherRoutes)
+app.use('/coordinates',weatherRoutes)
 
 app.listen(3000, () => {
   console.log("Server started in http://localhost:3000");
