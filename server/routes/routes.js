@@ -2,10 +2,26 @@
 import axios from 'axios'
 import express from "express"
 import 'dotenv/config'
+import pool from '../database/db.js'
 
 const router = express.Router()
 
+//Route to get the locations and their coordinates
+router.get('/locations',async (req,res)=>{
+  const sql = 'SELECT id,name from coordinates'
 
+  try{
+    const [rows] = await pool.query(sql)
+    res.json(rows)
+  }
+  catch(e){
+    console.log(e)
+    console.log('Failed to fetch coordinates')
+    res.status(400).json({error: e})
+  }
+})
+
+//Route to get the weather from lat and long of the location 
 router.get('/weather', async (req, res) => {
   const { lat, lon } = req.query;
 
