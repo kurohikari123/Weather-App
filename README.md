@@ -1,26 +1,25 @@
-#  WeatherVue 🌦️
+#  WeatherApp 🌦️
 
-![WeatherVue Demo GIF][demo-gif]
+![WeatherApp Demo GIF][demo-gif]
 
-**WeatherVue** is a beautifully designed, modern weather dashboard that provides real-time weather data with a dynamic, time-of-day interface. Built with a React frontend and a secure Express.js backend, this application showcases a full-stack implementation of a real-world service.
+**WeatherApp** is a beautifully designed, modern weather dashboard that provides real-time weather data with a dynamic, time-of-day interface. Built with a React frontend and a secure Express.js backend, this application showcases a full-stack implementation of a real-world service.
 
 ---
 
 ### ✨ Features
 
--   **Dynamic Backgrounds:** The UI features 4 different background themes that change automatically based on the time of day (Morning, Midday, Afternoon, Night).
+-   **Dynamic Backgrounds:** The UI features 4 different background themes that change automatically based on the time of day (Morning, Midday, Afternoon, Night).(To be implemented)
 -   **Real-time Weather Data:** Provides current temperature, conditions, and more by leveraging the OpenWeatherMap API.
--   **Automatic Geolocation:** On load, the app requests the user's location to provide instant, hyper-local weather data.
 -   **Manual Search:** Users can search for the weather in any city worldwide.
 -   **Pre-defined Location Dropdown:** A dropdown menu is populated from a database, allowing users to select from a curated list of locations.
 -   **Secure Backend:** The Express.js server handles all API calls, keeping the API key secure and off the client-side.
--   **Responsive Design:** A clean, modern UI that looks great on both desktop and mobile devices.
+-   **Responsive Design:** A clean, modern UI that looks great on both desktop and mobile devices.(To be implemented)
 
 ---
 
 ### 🛠️ Tech Stack & Architecture
 
-This project is built with a modern, full-stack architecture, separating the client and server for security and scalability.
+This project is built with a modern, full-stack architecture, separating the client and server for scalability.
 
 #### Frontend
 
@@ -32,7 +31,7 @@ This project is built with a modern, full-stack architecture, separating the cli
 -   **React.js:** For building the dynamic and interactive user interface.
 -   **Material-UI (MUI):** For a rich set of pre-built, production-ready UI components.
 -   **Axios:** As a modern, promise-based HTTP client for making API calls to the backend.
--   **Custom SVGs & CSS:** For custom styling and the beautiful time-of-day backgrounds.
+-   **Custom SVGs & CSS:** For custom styling and the beautiful time-of-day backgrounds.(Assets available but you can change it)
 
 #### Backend
 
@@ -50,8 +49,6 @@ This project is built with a modern, full-stack architecture, separating the cli
 
 ### 🚀 Getting Started
 
-To get a local copy up and running, follow these simple steps.
-
 #### Prerequisites
 
 -   Node.js (v14 or later)
@@ -63,15 +60,16 @@ To get a local copy up and running, follow these simple steps.
 
 1.  **Clone the repo**
     ```sh
-    git clone [Your Repository Link]
-    cd weather-vue-project
+    git clone [Repository Link]
+    cd client/Weather Application
+    cd server
     ```
 
 2.  **Setup the Backend (Express Server)**
     -   Navigate to the `backend` directory.
     -   Install NPM packages.
         ```sh
-        cd backend
+        cd server
         npm install
         ```
     -   Create a `.env` file in the `backend` root and add your credentials:
@@ -90,7 +88,7 @@ To get a local copy up and running, follow these simple steps.
         ```
     -   Start the backend server.
         ```sh
-        npm start
+        npm run server
         ```
         Your server should now be running on `http://localhost:3001`.
 
@@ -98,14 +96,14 @@ To get a local copy up and running, follow these simple steps.
     -   Navigate to the `frontend` directory.
     -   Install NPM packages.
         ```sh
-        cd ../frontend
+        cd client/Weather Application
         npm install
         ```
     -   Start the frontend development server.
         ```sh
-        npm start
+        npm run client
         ```
-        Your React app should now be running and accessible at `http://localhost:3000`.
+        Your React app should now be running and accessible at `http://localhost:{SOME PORT}`.
 
 ---
 
