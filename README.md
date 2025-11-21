@@ -81,10 +81,10 @@ This project is built with a modern, full-stack architecture, separating the cli
         OPENWEATHER_API_KEY=your_openweathermap_api_key
 
         # MySQL Database Connection
-        MYSQL_HOST=localhost
-        MYSQL_USER=your_mysql_username
-        MYSQL_PASSWORD=your_mysql_password
-        MYSQL_DATABASE=your_database_name
+        DB_HOST=localhost
+        DB_USER=your_mysql_username
+        DB_PASSWORD=your_mysql_password
+        DB_DATABASE=your_database_name
         ```
     -   Start the backend server.
         ```sh
