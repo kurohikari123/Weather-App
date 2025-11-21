@@ -2,16 +2,16 @@
 import axios from "axios"
 
 const apiClient = axios.create({
-	baseUrl:'http://localhost:3000',
+	baseURL:'http://localhost:3000',
 	headers:{
 		'Content-Type':'application/json'
 	}
 })
 
-const getWeatherCity = (lat,lon) =>{
-	return apiClient.get('/api/weather',{
-		params:{lat,lon}
-	})
+//Get the locations and IDS from the database
+const getLocations = async ()=>{
+  const response = await apiClient.get('/coordinates/locations')
+  return response.data
 }
 
-export default getWeatherCity
+export default getLocations
