@@ -2,7 +2,7 @@ import { FormControl,InputLabel,Select,MenuItem, Container, Grid, Typography, Bo
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect,useState } from "react";
 import { forecastData, scheduleData } from "./dummydata/DummyData";
-import getWeatherData from './dummydata/api.jsx'
+import {getLocations,getSelectedLocation} from './dummydata/api.jsx'
 
 // Create a theme instance.
 const theme = createTheme({
@@ -24,11 +24,12 @@ export default function WeatherDashboard() {
   
   const [currentTime, setCurrentTime] = useState(new Date());
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-  const [error,setError] = useState('')
-  const [isLoading,setLoading]  = useState(false)
-  const [presentWeather,setpresentWeather] = useState({})
+  // const [error,setError] = useState('')
+  // const [isLoading,setLoading]  = useState(false)
+  const [locations,setLocations] = useState([])
   // Here, we split the string "10:30 PM" into ["10:30", "PM"]
-  //
+  const [selectedLocation,setSelectedLocation] = useState('')
+
   const formatTime = (date) => {
     // We get a string like "10:30 PM"
     return date.toLocaleTimeString([], {
@@ -53,6 +54,22 @@ export default function WeatherDashboard() {
   // This function formats the time and ensures it includes AM/PM
 
 
+  //Fetch the locations and IDs from the server
+  //Add the async function inside the hook
+  useEffect(()=>{
+    const loadLocations = async ()=>{
+      try{
+        const response = await getLocations()
+        setLocations(response)
+      }catch(e){
+        console.log(e)
+      }
+    }
+
+    //Call the locations
+    loadLocations()
+  },[])
+
   const formatDate = (date) => {
     return date.toLocaleDateString([], {
       weekday: "long",
@@ -67,6 +84,17 @@ export default function WeatherDashboard() {
     setSelectedDayIndex(index);
     // In a real app, you would also trigger a data fetch or update the main display here
   };
+
+
+  //Handle location dropdown change
+  const handleLocationChange = (event)=>{
+    setSelectedLocation(event.target.value)
+    console.log(event.target.value)
+
+    //Call the API
+    const locationData  = getSelectedLocation(event.target.value)
+    console.log(locationData)
+  }
 
   const currentDisplayWeather = forecastData[selectedDayIndex];
   // Destructure for easier access in the JSX
@@ -184,12 +212,14 @@ export default function WeatherDashboard() {
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
-    value={''}
+    value={selectedLocation}
     label="Location"
+    onChange = {handleLocationChange}
   >
-    <MenuItem value={10}>Ten</MenuItem>
-    <MenuItem value={20}>Twenty</MenuItem>
-    <MenuItem value={30}>Thirty</MenuItem>
+    {/* map the fetched locations */}
+    {locations.map((location)=>(
+       <MenuItem  value={location.id}>{location.name}</MenuItem>
+    ))}
   </Select>
 </FormControl>
             </Grid>
