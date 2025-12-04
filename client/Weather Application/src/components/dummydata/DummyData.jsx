@@ -7,7 +7,6 @@ const forecastData = [
   { day: "THU", temp: 20, Icon: CloudIcon, condition: "Partly Cloudy" },
   { day: "FRI", temp: 21, Icon: ClearSkyIcon, condition: "Sunny" },
   { day: "SAT", temp: 21, Icon: ClearSkyIcon, condition: "Sunny" },
-  { day: "SUN", temp: 27, Icon: CloudIcon, condition: "Cloudy" },
 ];
 
 const scheduleData = [
