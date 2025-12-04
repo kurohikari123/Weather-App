@@ -22,30 +22,52 @@ router.get('/locations',async (req,res)=>{
 })
 
 //Route to get the weather from lat and long of the location 
-router.get('/weather', async (req, res) => {
-  const { lat, lon } = req.query;
+router.get('/weather/:id', async (req, res) => {
 
+  const loc_id = req.params.id
+
+  //Log the ID to check
+  console.log(loc_id)
+
+  const sql = 'SELECT lat,lon from coordinates where id = ?'
+  const [row] = await pool.query(sql,[loc_id])
+  const {lat, lon} = row[0]
+  
   if (!lat || !lon) {
     return res.status(400).json({ error: 'Latitude and longitude are required' });
   }
 
   const apiKey = process.env.OPEN_WEATHER_API;
   // Note the different API endpoint structure: uses lat and lon
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=metric`;
 
   try {
     const response = await axios.get(apiUrl);
-    const weatherData = response.data;
+    const weatherData = response.data.list;
 
-    const simplifiedData = {
-      city: weatherData.name,
-      temperature: weatherData.main.temp,
-      condition: weatherData.weather[0].main,
-      description: weatherData.weather[0].description,
-      icon: weatherData.weather[0].icon,
-    };
+    // Map the data from the 5 day list to the simplifiedData
+    const forecastData = {}
+    weatherData.forEach((item)=>{
 
-    res.json(simplifiedData);
+     const dtKey = item.dt_txt.split(' ')[0]
+
+       forecastData[dtKey] = {
+          // city: item.city.name,
+          day: new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
+          temperature: item.main.temp,
+          condition: item.weather[0].main,
+          description: item.weather[0].description,
+          icon: item.weather[0].icon,
+      }
+    })
+
+    // Clean up into a nice array to loop easily in the frontend
+    let cleanForecast = []
+    for(const dtkey in forecastData){
+       cleanForecast.push(forecastData[dtkey]) // Array  
+    }
+
+    res.json(cleanForecast);
 
   } catch (error) {
     console.error('Error fetching weather data by coords:', error.response?.data?.message || error.message);
