@@ -3,6 +3,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect,useState } from "react";
 import { forecastData, scheduleData } from "./dummydata/DummyData";
 import {getLocations,getSelectedLocation} from './dummydata/api.jsx'
+//For the commit
 
 // Create a theme instance.
 const theme = createTheme({
