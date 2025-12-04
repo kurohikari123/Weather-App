@@ -9,9 +9,14 @@ const apiClient = axios.create({
 })
 
 //Get the locations and IDS from the database
-const getLocations = async ()=>{
+export const getLocations = async ()=>{
   const response = await apiClient.get('/coordinates/locations')
   return response.data
 }
 
-export default getLocations
+// Function to handle selected location
+export const getSelectedLocation = async (id) =>{
+  const response = await apiClient.get(`/api/weather/${id}`)
+  return response.data
+}
+
