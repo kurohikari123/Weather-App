@@ -1,9 +1,9 @@
 import { FormControl,InputLabel,Select,MenuItem, Container, Grid, Typography, Box, Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect,useState } from "react";
-import { forecastData, scheduleData } from "./dummydata/DummyData";
+import { scheduleData } from "./dummydata/DummyData";
 import {getLocations,getSelectedLocation} from './dummydata/api.jsx'
-//For the commit
+import WeatherIcon from './icons/WeatherIcons.jsx'
 
 // Create a theme instance.
 const theme = createTheme({
@@ -30,6 +30,7 @@ export default function WeatherDashboard() {
   const [locations,setLocations] = useState([])
   // Here, we split the string "10:30 PM" into ["10:30", "PM"]
   const [selectedLocation,setSelectedLocation] = useState('')
+  const [forecastData,setForecastData] = useState([])
 
   const formatTime = (date) => {
     // We get a string like "10:30 PM"
@@ -88,22 +89,18 @@ export default function WeatherDashboard() {
 
 
   //Handle location dropdown change
-  const handleLocationChange = (event)=>{
+  //Had to make it async so that the component does not re render onChange
+  const handleLocationChange = async (event)=>{
     setSelectedLocation(event.target.value)
     console.log(event.target.value)
 
     //Call the API
-    const locationData  = getSelectedLocation(event.target.value)
-    console.log(locationData)
+    const locationData  = await getSelectedLocation(event.target.value)
+    console.log(Array.isArray(locationData))
+    setForecastData(locationData)
   }
 
-  const currentDisplayWeather = forecastData[selectedDayIndex];
-  // Destructure for easier access in the JSX
-  const {
-    temp: displayTemp,
-    Icon: DisplayIcon,
-    condition: displayCondition,
-  } = currentDisplayWeather;
+  const currentDisplayWeather = forecastData[selectedDayIndex] | null;
 
   return (
     <ThemeProvider theme={theme}>
@@ -199,17 +196,19 @@ export default function WeatherDashboard() {
                 mt: { xs: 4, md: 0 },
               }}
             >
-              <DisplayIcon
+              {/* {WeatherIcon(forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d")} */}
+              <WeatherIcon
+                code = {forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d"}
                 style={{ width: 60, height: 60, marginBottom: "8px" }}
               />
-              <Typography variant="h5">{displayCondition}</Typography>
-              <Typography variant="body2">Terraxia, Cosmos'Eternal</Typography>
+              {/* <Typography variant="h5">{forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "Please Select Location"}</Typography> */}
+              <Typography variant="h5">{forecastData.length > 0 ? forecastData[selectedDayIndex].condition : "Please Select Location"}</Typography>
               <Typography variant="h1" sx={{ ml: 4 }}>
-                {displayTemp}°
+                {forecastData.length > 0 ? forecastData[selectedDayIndex].temp : "Please Select Location"}°
               </Typography>
               {/*Insert a dropdown here to select location since geolocation API does not work*/}
 <FormControl fullWidth>
-  <InputLabel id="demo-simple-select-label">Age</InputLabel>
+  <InputLabel id="demo-simple-select-label">Area</InputLabel>
   <Select
     labelId="demo-simple-select-label"
     id="demo-simple-select"
@@ -225,7 +224,7 @@ export default function WeatherDashboard() {
 </FormControl>
             </Grid>
           </Grid>
-
+ 
           {/* Middle Section: Cityscape Placeholder */}
           <Box
             sx={{
@@ -248,11 +247,11 @@ export default function WeatherDashboard() {
               scrollbarWidth: "none", // For Firefox
             }}
           >
-            {forecastData.map(({ day, temp, Icon }, index) => {
+            {forecastData.map((value,index) => {
               const isActive = selectedDayIndex === index;
               return (
                 <Paper
-                  key={day}
+                  key={value.day}
                   elevation={0}
                   onClick={() => handleForecastClick(index)} // Make the paper clickable
                   sx={{
@@ -279,9 +278,11 @@ export default function WeatherDashboard() {
                     variant="body2"
                     sx={{ mb: 1, textTransform: "uppercase" }}
                   >
-                    {day}
+                    {value.day}
                   </Typography>
-                  <Icon
+                  {/* {WeatherIcon(forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d")} */}
+                  <WeatherIcon
+                    code = {forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d"}
                     style={{
                       width: 32,
                       height: 32,
@@ -290,7 +291,7 @@ export default function WeatherDashboard() {
                       color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)",
                     }}
                   />
-                  <Typography variant="h6">{temp}°</Typography>
+                  <Typography variant="h6">{value.temp}°</Typography>
                 </Paper>
               );
             })}
