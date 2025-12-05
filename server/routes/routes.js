@@ -54,10 +54,10 @@ router.get('/weather/:id', async (req, res) => {
        forecastData[dtKey] = {
           // city: item.city.name,
           day: new Date(item.dt * 1000).toLocaleDateString('en-US', { weekday: 'short' }),
-          temperature: item.main.temp,
+          temp: item.main.temp,
           condition: item.weather[0].main,
           description: item.weather[0].description,
-          icon: item.weather[0].icon,
+          Icon: item.weather[0].icon,
       }
     })
 
