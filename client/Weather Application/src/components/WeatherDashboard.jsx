@@ -204,7 +204,7 @@ export default function WeatherDashboard() {
               {/* <Typography variant="h5">{forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "Please Select Location"}</Typography> */}
               <Typography variant="h5">{forecastData.length > 0 ? forecastData[selectedDayIndex].condition : "Please Select Location"}</Typography>
               <Typography variant="h1" sx={{ ml: 4 }}>
-                {forecastData.length > 0 ? forecastData[selectedDayIndex].temp : "Please Select Location"}°
+                {forecastData.length > 0 ? Math.trunc(forecastData[selectedDayIndex].temp) : "Please Select Location"}°
               </Typography>
               {/*Insert a dropdown here to select location since geolocation API does not work*/}
 <FormControl fullWidth>
@@ -291,7 +291,7 @@ export default function WeatherDashboard() {
                       color: isActive ? "#FFFFFF" : "rgba(255, 255, 255, 0.6)",
                     }}
                   />
-                  <Typography variant="h6">{value.temp}°</Typography>
+                  <Typography variant="h6">{Math.trunc(value.temp)}°</Typography>
                 </Paper>
               );
             })}
