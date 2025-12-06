@@ -282,7 +282,7 @@ export default function WeatherDashboard() {
                   </Typography>
                   {/* {WeatherIcon(forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d")} */}
                   <WeatherIcon
-                    code = {forecastData.length > 0 ? forecastData[selectedDayIndex].Icon : "01d"}
+                    code = {forecastData.length > 0 ? value.Icon : "01d"}
                     style={{
                       width: 32,
                       height: 32,
