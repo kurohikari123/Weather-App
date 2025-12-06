@@ -3,6 +3,7 @@ import axios from 'axios'
 import express from "express"
 import 'dotenv/config'
 import pool from '../database/db.js'
+import currentWeather from '../middleware/currentWeather.js'
 
 const router = express.Router()
 
@@ -22,7 +23,7 @@ router.get('/locations',async (req,res)=>{
 })
 
 //Route to get the weather from lat and long of the location 
-router.get('/weather/:id', async (req, res) => {
+router.get('/weather/:id',currentWeather, async (req, res) => {
 
   const loc_id = req.params.id
 
@@ -63,6 +64,9 @@ router.get('/weather/:id', async (req, res) => {
 
     // Clean up into a nice array to loop easily in the frontend
     let cleanForecast = []
+
+    cleanForecast.push(req.currentForeCast)
+
     for(const dtkey in forecastData){
        cleanForecast.push(forecastData[dtkey]) // Array  
     }
