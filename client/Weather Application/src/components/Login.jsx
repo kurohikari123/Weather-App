@@ -20,6 +20,9 @@ import {
   VisibilityOff, 
   Login as LoginIcon 
 } from '@mui/icons-material';
+import {postUser} from './dummydata/api.jsx'
+import {useNavigate} from 'react-router-dom'
+import {toast} from 'react-toastify'
 
 // --- 1. Custom Dark Theme to match your screenshot ---
 const theme = createTheme({
@@ -70,14 +73,24 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const navigate = useNavigate()
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => event.preventDefault();
 
   //Handle login here
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log("Logging in with:", email, password);
-    // Add your backend login logic here (Axios call)
+    const response = await postUser({'email':email,'password':password})
+
+    //Route to dashboard on success
+    if(response.status === 1){
+      navigate('/dashboard')
+    }
+    else{
+      toast.error(response.message)
+    }
+
   };
 
   return (
