@@ -1,6 +1,6 @@
 import express from "express";
 import cors from "cors";
-import weatherRoutes from "./routes/routes.js"
+import weatherRoutes from "./routes/api.js"
 import 'dotenv/config'
 
 const app = express();
