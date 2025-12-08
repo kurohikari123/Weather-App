@@ -36,3 +36,8 @@ export const getSelectedLocation = async (id) =>{
   return response.data
 }
 
+//Post user data
+export const postUser = async (userData) =>{
+  const response = await apiClient.post('/user/login',userData)
+  return response.data
+}
