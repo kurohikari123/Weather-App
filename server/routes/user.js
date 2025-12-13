@@ -2,9 +2,12 @@
 import axios from 'axios'
 import express from "express"
 import pool from '../database/db.js'
+import 'dotenv/config'
+import jwt from 'jsonwebtoken'
 
 const router = express.Router()
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+const JWT_SECRET = process.env.JWT_SECRET
 
 //Login Route
 router.post('/login',async (req,res)=>{
@@ -29,8 +32,18 @@ router.post('/login',async (req,res)=>{
   }
 
   //Test password
+  //Also need to set token for verification (JWT)
   if(row[0][0].password == password){
-    res.status(200).json({"status":1,"message":"Login Successful"})
+
+    //Create a JWT payload
+    const payload = {
+        email: email,
+    }
+
+    //set JWT token
+    const token = jwt.sign(payload, JWT_SECRET,{expiresIn: '1h'})
+
+    res.status(200).json({"status":1,"message":"Login Successful","token":token})
   }
 
   res.json({"status":4,"message":"Invalid email or password"})
