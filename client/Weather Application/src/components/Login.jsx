@@ -23,6 +23,7 @@ import {
 import {postUser} from './dummydata/api.jsx'
 import {useNavigate} from 'react-router-dom'
 import {toast} from 'react-toastify'
+import {useAuth} from '../helper/AuthContext.jsx'
 
 // --- 1. Custom Dark Theme to match your screenshot ---
 const theme = createTheme({
@@ -72,6 +73,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const {login} = useAuth()
 
   const navigate = useNavigate()
 
@@ -83,8 +85,12 @@ export default function LoginPage() {
     e.preventDefault();
     const response = await postUser({'email':email,'password':password})
 
+    //Just for debugging
+    console.log(response)
+
     //Route to dashboard on success
     if(response.status === 1){
+      login(response)
       navigate('/dashboard')
     }
     else{
