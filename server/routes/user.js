@@ -22,9 +22,12 @@ router.post('/login',async (req,res)=>{
     res.status(400).json({"status":0,"message":"Invalid email"})
   }
 
-  const sql = 'select password from user where email = ? '
+  //Need to getch name as well
+  const sql = 'select * from user where email = ? '
   const row = await pool.query(sql,[email])
-  console.log(row[0][0])
+  console.log(row[0][0].name)
+
+  const name = row[0][0].name
 
   //Check if user exist or not
   if(row[0].length == 0){
@@ -43,7 +46,7 @@ router.post('/login',async (req,res)=>{
     //set JWT token
     const token = jwt.sign(payload, JWT_SECRET,{expiresIn: '1h'})
 
-    res.status(200).json({"status":1,"message":"Login Successful","token":token})
+    res.status(200).json({"status":1,"message":"Login Successful","token":token,"name":name})
   }
 
   res.json({"status":4,"message":"Invalid email or password"})
