@@ -90,7 +90,8 @@ export default function LoginPage() {
 
     //Route to dashboard on success
     if(response.status === 1){
-      login(response)
+      login(response.token)
+      console.log('Navigating to dashboard')
       navigate('/dashboard')
     }
     else{
@@ -273,7 +274,7 @@ export default function LoginPage() {
               <Grid container justifyContent="center" sx={{ mt: 1 }}>
                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)' }}>
                     Don't have an account? {' '}
-                    <Link href="#" variant="body2" sx={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
+                    <Link href="/register" variant="body2" sx={{ color: 'white', fontWeight: 'bold', textDecoration: 'none' }}>
                         Sign Up
                     </Link>
                  </Typography>
