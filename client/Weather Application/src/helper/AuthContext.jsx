@@ -6,11 +6,13 @@ const AuthContext = createContext()
 export function AuthProvider({children}){
 
   const [token,setToken] = useState(null)// State triggers a render
+  const [loading,setLoading] = useState(true)
   
   //load the token from local storage if set
   useEffect(()=>{
     const saved = localStorage.getItem("token")
     if(saved) setToken(saved)//by doing this the site re renders and thus keeps the user logged in
+    setLoading(false)
   },[])
   
   //set the token and store it on login
@@ -27,7 +29,7 @@ export function AuthProvider({children}){
 
   //also need to wrap the children by the AuthContext and return it
   return(
-      <AuthContext.Provider value={{token,login,logout}}>
+      <AuthContext.Provider value={{token,login,logout,loading}}>
           {children}
       </AuthContext.Provider>
   )
