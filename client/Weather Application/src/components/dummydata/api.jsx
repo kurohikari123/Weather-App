@@ -41,3 +41,8 @@ export const postUser = async (userData) =>{
   const response = await apiClient.post('/user/login',userData)
   return response.data
 }
+
+export const userRegister = async (userData)=>{
+  const response = await apiClient.post('/user/register',userData)
+  return response.data
+}
