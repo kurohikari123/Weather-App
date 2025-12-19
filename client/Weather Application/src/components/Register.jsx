@@ -24,6 +24,7 @@ import {
   CheckCircle,
   Cancel
 } from '@mui/icons-material';
+import {userRegister} from './dummydata/api.jsx'
 
 // --- Custom Dark Theme (Matching your Login Page) ---
 const theme = createTheme({
@@ -77,6 +78,7 @@ export default function RegistrationPage() {
 
   // --- Handlers ---
   const handleChange = (e) => {
+    console.log(e.target)
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
@@ -120,11 +122,18 @@ export default function RegistrationPage() {
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
       console.log("Registration Successful:", formData);
       // Perform API call here (e.g., Axios.post('/api/register', formData))
+      const response  = await userRegister(formData)
+
+      if(response.status === 1){
+        console.log(response)
+       }
+
+      console.log('Register Successful:',response)
     }
   };
 
