@@ -23,6 +23,7 @@ app.use('/coordinates',weatherRoutes)
 
 //Specify the User call routes here
 app.use('/user',userRoute)
+app.use('/register',userRoute)
 
 app.listen(3000, () => {
   console.log("Server started in http://localhost:3000");
